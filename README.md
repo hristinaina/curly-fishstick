@@ -1,17 +1,18 @@
 # Stroke prediction
 
-This project is a machine learning model for predicting strokes. The project uses ensemble models to make predictions
-and is implemented in Python. 
+Stroke prediction is a project implemented as the university project for "Machine Learning" course. 
+This project is a machine learning model for predicting strokes. 
+It uses ensemble models to make predictions and is implemented in Python. 
 
 ## Installing / Getting started
 
-1. CD into the folder where requirements.txt can be found and run the following command in your terminal to install the required packages
+1. Position in the root folder and run the following command in your terminal to install the required packages
    
 ```shell
 pip install -r requirements.txt
 ```
 
-2. Run the script itself
+2. Run the script by executing the following command in your terminal
 
 ```shell
 python main.py
@@ -33,8 +34,11 @@ The model is implemented in the [main.py](./main.py) file. In this file, you can
 preprocessing it, training the model and evaluating its performance.
 
 Many different models have been used in this project, but the best performing model is the Voting Classifier with Random Forest classifier.
-You can check out the feature importance of the Random Forest model with AdaBoost classifier, which is saved in the data folder.
 
+## Results
+
+Results are saved in the [results](./results) folder. The results include the classification report for best performing classifier and feature importance 
+of the Random Forest model with AdaBoost classifier.
 ## Author
 
 Hristina Adamović SV32/2020
