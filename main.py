@@ -1,4 +1,7 @@
+import numpy as np
 import pandas as pd
+from matplotlib import pyplot as plt
+from sklearn.neighbors import KNeighborsClassifier
 from sklearn.preprocessing import LabelEncoder
 from sklearn.decomposition import PCA
 from sklearn.metrics import classification_report
@@ -34,19 +37,21 @@ def remove_outliers(df):
 def oversampling(X, y):
     adasyn = ADASYN(random_state=42)
     X_resampled, y_resampled = adasyn.fit_resample(X, y)
+    # print(y_resampled.value_counts())
     return X_resampled, y_resampled
 
 
 def encode(X):
-    encoder = LabelEncoder()
-    for column in X.columns:
-        if X[column].dtype == 'object':
-            X[column] = encoder.fit_transform(X[column])
+    categ_columns = X.select_dtypes(include=['object']).columns
+    X = pd.get_dummies(X, columns=categ_columns, drop_first=True)
     return X
 
 
 def fit_model(X_train, y_train):
-    model = RandomForestClassifier(n_estimators=200, max_depth=10, random_state=42, class_weight='balanced_subsample')
+    model = VotingClassifier(
+        estimators=[('rf1', RandomForestClassifier(max_depth=15, n_estimators=150, random_state=42))],
+        voting='soft'
+    )
     model.fit(X_train, y_train)
     return model
 
@@ -64,6 +69,18 @@ def evaluate(model, X_test, y_test):
     print(classification_report(y_test, y_pred))
 
 
+def plot_feature_importances(model, feature_names):
+    importances = model.feature_importances_
+    indices = np.argsort(importances)[::-1]
+
+    plt.figure(figsize=(12, 6))
+    plt.title("Feature Importances")
+    plt.bar(range(len(importances)), importances[indices], align="center")
+    plt.xticks(range(len(importances)), np.array(feature_names)[indices], rotation=90)
+    plt.tight_layout()
+    plt.show()
+
+
 def main():
     df = load_data()
     df = handle_missing_values(df)
@@ -79,6 +96,9 @@ def main():
     model = fit_model(X_train, y_train)
 
     evaluate(model, X_test, y_test)
+
+    # feature_names = X.columns
+    # plot_feature_importances(model, feature_names)
 
 
 if __name__ == '__main__':
