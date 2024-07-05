@@ -91,7 +91,7 @@ def main():
 
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, stratify=y, random_state=42)
 
-    X_train, X_test = reduction(X_train, X_test)
+    # X_train, X_test = reduction(X_train, X_test)
     model = fit_model(X_train, y_train)
 
     evaluate(model, X_test, y_test)
